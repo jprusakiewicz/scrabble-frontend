@@ -2064,6 +2064,7 @@
           <e p="Third-Party Notices.txt" t="Include" />
         </e>
         <e p="buttons.cs" t="Include" />
+        <e p="ConnectionManager.cs" t="Include" />
         <e p="Editor" t="Include">
           <e p="RemoveMobileSupportWarningWebBuild.cs" t="Include" />
         </e>

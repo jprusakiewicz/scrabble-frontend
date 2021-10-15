@@ -1,19 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell
 {
-    public Cell(char letter, int x, int y)
+    public Cell(char letter, int x, int y, bool isPlayers = false)
     {
         this.letter = letter;
         this.x = x;
         this.y = y;
+        this.isPlayers = isPlayers;
     }
 
     public char letter;
     public int x;
     public int y;
+    public bool isPlayers;
 }
 
 public class LetterManager : MonoBehaviour
@@ -27,12 +30,24 @@ public class LetterManager : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Player>();
     }
 
-
-    public void AddLetter(char letter, int x, int y)
+    public void ResetChosenLetter()
     {
-        var c = new Cell(letter, x, y);
+        choosenLetter = null;
+    }
+
+    public void HandleServerData(List<BoardConfig> serverData)
+    {
+        cells = new List<Cell>();
+        foreach (var cell in serverData)
+        {
+            AddLetter(cell.letter[0], Convert.ToInt32(cell.x), Convert.ToInt32(cell.y));
+        }
+    }
+
+    public void AddLetter(char letter, int x, int y, bool isPlayers=false)
+    {
+        var c = new Cell(letter, x, y, isPlayers);
         cells.Add(c);
-        Debug.Log(cells.Count);
     }
 
 
@@ -71,6 +86,16 @@ public class LetterManager : MonoBehaviour
         choosenLetter = null;
         player.AddLetter(letter.ToString());
     }
+    
+    public void PutBackLetter(int x, int y)
+    {
+        Cell cell = cells.Find(c => c.x == x && c.y == y);
+        // z planszy na kupke
+        choosenLetter = null;
+        cells.Remove(cell);
+        player.AddLetter(cell.letter.ToString());
+    }
+
     public void TakeLetterFromPlayer(string letter)
     {
         // z kupki na plansze
@@ -94,7 +119,27 @@ public class LetterManager : MonoBehaviour
     public void SetChosenLetter(char currentLetter)
     {
         choosenLetter = currentLetter;
-        Debug.Log("choosen letter" + currentLetter);
+    }
 
+    public bool IsPlayers(int x, int y)
+    {
+        Cell cell = cells.Find(c => c.x == x && c.y == y);
+        if (cell == null) return false;
+        return cell.isPlayers;
+    }
+
+    public void setIsPlayers(int x, int y)
+    {
+        Cell cell = cells.Find(c => c.x == x && c.y == y);
+        Cell new_cell = new Cell(cell.letter, x, y, true);
+        cells.Remove(cell);
+        cells.Add(new_cell);
+    }
+    public void setIsNotPlayers(int x, int y)
+    {
+        Cell cell = cells.Find(c => c.x == x && c.y == y);
+        Cell new_cell = new Cell(cell.letter, x, y, false);
+        cells.Remove(cell);
+        cells.Add(new_cell);
     }
 }

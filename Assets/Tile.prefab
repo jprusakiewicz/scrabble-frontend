@@ -66,8 +66,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 15e9abf429cb64145968c9990990f596, type: 2}
-  m_sharedMaterial: {fileID: -3896441507856264623, guid: 15e9abf429cb64145968c9990990f596,
+  m_fontAsset: {fileID: 11400000, guid: 5006d98ef1d244897bc1e1dcd95f0b53, type: 2}
+  m_sharedMaterial: {fileID: -8558137462910205314, guid: 5006d98ef1d244897bc1e1dcd95f0b53,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -187,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 0}
+  isChosen: 0
 --- !u!222 &8064725870002637282
 CanvasRenderer:
   m_ObjectHideFlags: 0

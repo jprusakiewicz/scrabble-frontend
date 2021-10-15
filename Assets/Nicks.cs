@@ -1,9 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+public class iii
+{
+    public string nick { get; set; }
+    public string score { get; set; }
+    public bool has_turn { get; set; }
+}
 
 public class Nicks : MonoBehaviour
 {
+    
     [SerializeField] private GameObject FirstNick;
     [SerializeField] private GameObject SecondNick;
     [SerializeField] private GameObject ThirdNick;
@@ -23,20 +32,19 @@ public class Nicks : MonoBehaviour
         FourthNick.SetActive(false);
     }
 
-    public void ActivateNicks(Dictionary<string, Dictionary<string, dynamic>> nicks)
+    public void ActivateNicks(Dictionary<string, iii> nicks)
     {
         DeactivateNicks();
         if (nicks.TryGetValue("1", out var first))
         {
             foreach (var go in FirstNick.GetComponentsInChildren<TMPro.TextMeshProUGUI>())
             {
-                if (go.name == "nick")
-                    go.GetComponent<TMPro.TextMeshProUGUI>().text = (string) first["nick"];
-                if (first["has_turn"] == true && go.name == "arrow")
-                {
-                    go.gameObject.SetActive(true);
-                }
+                if (go.name == "Nick")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = first.nick;
+                else if (go.name == "Score")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = first.score;
             }
+            FirstNick.transform.Find("Arrow").gameObject.SetActive(first.has_turn);
 
             FirstNick.SetActive(true);
         }
@@ -45,12 +53,12 @@ public class Nicks : MonoBehaviour
         {
             foreach (var go in SecondNick.GetComponentsInChildren<TMPro.TextMeshProUGUI>())
             {
-                if (go.name == "nick")
-                    go.GetComponent<TMPro.TextMeshProUGUI>().text = (string) second["nick"];
-                if (second["has_turn"] == true && go.name == "arrow")
-                {
-                    go.gameObject.SetActive(true);
-                }
+                if (go.name == "Nick")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = second.nick;
+                else if (go.name == "Score")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = second.score;
+                SecondNick.transform.Find("Arrow").gameObject.SetActive(second.has_turn);
+
             }
 
             SecondNick.SetActive(true);
@@ -60,12 +68,12 @@ public class Nicks : MonoBehaviour
         {
             foreach (var go in ThirdNick.GetComponentsInChildren<TMPro.TextMeshProUGUI>())
             {
-                if (go.name == "nick")
-                    go.GetComponent<TMPro.TextMeshProUGUI>().text = (string)  third["nick"];
-                if (third["has_turn"] == true && go.name == "arrow")
-                {
-                    go.gameObject.SetActive(true);
-                }
+                if (go.name == "Nick")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = third.nick;
+                else if (go.name == "Score")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = third.score;
+                ThirdNick.transform.Find("Arrow").gameObject.SetActive(third.has_turn);
+
             }
 
             ThirdNick.SetActive(true);
@@ -75,12 +83,12 @@ public class Nicks : MonoBehaviour
         {
             foreach (var go in FourthNick.GetComponentsInChildren<TMPro.TextMeshProUGUI>())
             {
-                if (go.name == "nick")
-                    go.GetComponent<TMPro.TextMeshProUGUI>().text = (string) fourth["nick"];
-                if (fourth["has_turn"] == true && go.name == "arrow")
-                {
-                    go.gameObject.SetActive(true);
-                }
+                if (go.name == "Nick")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = fourth.nick;
+                else if (go.name == "Score")
+                    go.GetComponent<TMPro.TextMeshProUGUI>().text = fourth.score;
+                FourthNick.transform.Find("Arrow").gameObject.SetActive(fourth.has_turn);
+
             }
 
             FourthNick.SetActive(true);

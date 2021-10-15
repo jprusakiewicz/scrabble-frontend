@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     [SerializeField] Button button;
     private LetterManager letterManager;
     private Player player;
+    public bool isChosen;
 
     void Start()
     {
@@ -17,7 +18,6 @@ public class Tile : MonoBehaviour
         button.onClick.AddListener(OnBtnClick);
         letterManager = GameObject.Find("LetterManager").GetComponent<LetterManager>();
         player = GameObject.Find("Player").GetComponent<Player>();
-        
 
 
 //        text = GetComponentInChildren<TextMeshProUGUI>();
@@ -26,24 +26,41 @@ public class Tile : MonoBehaviour
     // Update is called once per frame
     public void SetLetter(string letter)
     {
-        GetComponentInChildren<TextMeshProUGUI>().text = letter;
+        GetComponentInChildren<TextMeshProUGUI>().text = letter.ToUpper();
     }
-    
+
     void OnBtnClick()
     {
+        if (isChosen)
+        {
+            letterManager.ResetChosenLetter();
+            Deselect();
+            return;
+        }
+
         player.ResetTilesOpacity();
-        SetTileOpacity();
+        Select();
         string currentLetter = gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
 
         letterManager.SetChosenLetter(char.Parse(currentLetter));
 //        player.RemoveLetter(currentLetter);
     }
 
-    void SetTileOpacity()
+    void Select()
     {
+        isChosen = true;
         var image = GetComponent<Image>();
         var tempColor = image.color;
         tempColor.a = 0.5f;
+        image.color = tempColor;
+    }
+
+    public void Deselect()
+    {
+        isChosen = false;
+        var image = GetComponent<Image>();
+        var tempColor = image.color;
+        tempColor.a = 1f;
         image.color = tempColor;
     }
 }

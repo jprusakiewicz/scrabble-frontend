@@ -30,24 +30,29 @@ public class field : MonoBehaviour
 
     void OnBtnClick()
     {
-        Debug.Log("btn click");
-        string currentLetter = gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+        Debug.Log("btn click " + x + " " + y);
 
-        if (currentLetter != "")
+        if (letterManager.IsCellFilled(x, y) && letterManager.IsPlayers(x, y))
         {
-            letterManager.PutBackLetter(char.Parse(currentLetter));
+            letterManager.PutBackLetter(x, y);
             gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "";
             SetTileOpacity(0.02f);
+            letterManager.setIsNotPlayers(x, y);
         }
-        else
+        else if (!letterManager.IsCellFilled(x, y))
         {
             if (!letterManager.IsChosenLetter()) return;
             var letterToPutOnBoard = letterManager.GetChosenLetter();
             SetLetter(letterToPutOnBoard);
             letterManager.TakeLetterFromPlayer(letterToPutOnBoard.ToString());
-            letterManager.AddLetter((char) letterToPutOnBoard, x, y);
+            letterManager.AddLetter((char) letterToPutOnBoard, x, y, true);
             SetTileOpacity(0.75f);
         }
+    }
+
+    public string GetLetter()
+    {
+        return gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
     }
 
     public void SetLetter(char? letter)

@@ -20,18 +20,17 @@ public class Timer : MonoBehaviour
     void Update()
     {
         var delta = deadline - DateTime.Now;
-        if (0 < delta.Seconds || delta.Seconds > 50)
+        var seconds = delta.Minutes * 60 + delta.Seconds;
+        if (0 < seconds && seconds < 300)
         {
-            var timeAsString = delta.Seconds.ToString();
+            var timeAsString = seconds.ToString();
             if (text.text != timeAsString)
             {
                 text.text = timeAsString;
             }
         }
-        else
+        else if (text.text != " ")
             text.text = " ";
-
-
     }
 
     public void SetTimer(DateTime timestamp)
