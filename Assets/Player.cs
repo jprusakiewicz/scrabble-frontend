@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject playersTile;
-    private int tileSpacing = 10;
+    private int tileSpacing = 13;
     List<string> l = new List<string>();
 
 
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         var rt = playersTile.GetComponent<RectTransform>();
         var rect = rt.rect;
         var tileWidth = rect.width;
-        var positionOffset = numberOfLetters * (tileWidth / 2 + tileSpacing) / 2;
+        var positionOffset = numberOfLetters * (tileWidth / 2 + tileSpacing + 9) / 2;
         var spawnPosition = rect.x - positionOffset;
 
 

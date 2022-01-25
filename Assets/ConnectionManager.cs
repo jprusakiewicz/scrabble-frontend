@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using BestHTTP;
 using BestHTTP.JSON;
 using UnityEngine;
 using BestHTTP.WebSocket;
@@ -33,6 +34,7 @@ public class Config
     public string room_id;
     public string server_address;
     public string player_nick;
+    public string watchdog_address;
 }
 
 public class ConnectionManager : MonoBehaviour
@@ -51,6 +53,10 @@ public class ConnectionManager : MonoBehaviour
 
     private const float connectTimeout = 3;
     private float timeFromLastConnectionRequest = connectTimeout;
+    private const float KeepAliveTimeout = 8;
+
+    private float timeFromLastKeepAlive = 0;
+
 
     void Start()
     {
@@ -69,6 +75,17 @@ public class ConnectionManager : MonoBehaviour
 
     private void Update()
     {
+        // keep alive
+        if (timeFromLastKeepAlive >= KeepAliveTimeout)
+        {
+            KeepAlive();
+            timeFromLastKeepAlive = 0;
+        }
+        else
+        {
+            timeFromLastKeepAlive += Time.deltaTime;
+        }
+
         if ((string.IsNullOrEmpty(config.player_id) || webSocket != null) &&
             (string.IsNullOrEmpty(config.player_id) || webSocket.IsOpen)) return;
         if (timeFromLastConnectionRequest >= connectTimeout)
@@ -82,6 +99,15 @@ public class ConnectionManager : MonoBehaviour
             waitingText.SetActive(true);
             timeFromLastConnectionRequest += Time.deltaTime;
         }
+    }
+
+    private void KeepAlive()
+    {
+        if (string.IsNullOrEmpty(config.watchdog_address)) return;
+        var newUri = config.watchdog_address + "/keep_alive/" + config.player_id;
+        Debug.Log(newUri);
+        var request = new HTTPRequest(new Uri(newUri), methodType: HTTPMethods.Post);
+        request.Send();
     }
 
     private void ClearDesk()
@@ -115,7 +141,6 @@ public class ConnectionManager : MonoBehaviour
             buttons.HandleServerData(item.board);
             nicks.ActivateNicks(item.nicks);
             player.NewLetters(item.playerHand);
-
         }
         else
         {
@@ -137,13 +162,23 @@ public class ConnectionManager : MonoBehaviour
             config = JsonUtility.FromJson<Config>(json);
     }
 
+    public void Replace()
+    {
+        var d = new Dictionary<string, string>()
+        {
+            ["other"] = "replace",
+            ["letter"] = letterManager.GetChosenLetter().ToString(),
 
+        };
+        Debug.Log(Json.Encode(d));
+        webSocket.Send(Json.Encode(d));
+    }
+    
     public void SkipMove()
     {
         var d = new Dictionary<string, string>()
         {
-            ["other"] = "skip",
-            ["letter"] = letterManager.GetChosenLetter().ToString(),
+            ["other"] = "skip"
         };
         Debug.Log(Json.Encode(d));
         webSocket.Send(Json.Encode(d));

@@ -43,7 +43,6 @@ public class zoomer : MonoBehaviour
 
         MoveToCenter();
         Buttons.SpawnButtons();
-
     }
 
     public void MoveDown()
